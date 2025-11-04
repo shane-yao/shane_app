@@ -51,4 +51,4 @@ class DailyNote(object):
         # print(node.children[0].info)
         # print(node.children[1], node.children[1].children[0].children[1].children[1].children[0].children[0].content)
         # yaml_obj = yaml.safe_load(node.children[0].content)
-        # print(yaml_obj)    
+        # print(yaml_obj)
