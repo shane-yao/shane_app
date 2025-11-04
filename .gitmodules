@@ -1,8 +1,7 @@
-[submodule "shane_pkm"]
+[submodule "pkm"]
 	path = pkm
 	url = git@github.com:shane-yao/shane_pkm.git
 
-[submodule "shane_ledger"]
+[submodule "ledger"]
 	path = ledger
 	url = git@github.com:shane-yao/shane_ledger.git
-
