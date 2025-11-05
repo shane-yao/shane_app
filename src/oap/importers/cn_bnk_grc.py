@@ -1,21 +1,13 @@
 
-import re, datetime, locale
+import re, datetime, locale, decimal
 import pdfplumber
 
-from .base import BaseImporter
-from ..transactions import Transaction
+from .base import BaseImporter, BaseStatement, BaseTransaction
 
-print("::::::::::", locale.getlocale())
-class GRCStatement(object):
+class GRCStatement(BaseStatement):
     def __init__(self):
-        self.signed = ""
-        self.title = ""
-        self.account_name = ""
-        self.account_id = ""
-        self.apply_dt = None
-        self.transactions = []
-        self.query_start_at = None
-        self.query_end_at = None
+        super().__init__()
+
     def set_apply_datetime(self, datetime_str):
         self.apply_dt = datetime.datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
     
@@ -23,10 +15,7 @@ class GRCStatement(object):
         self.query_start_at = datetime.datetime.strptime(timespan_str[0:8], "%Y%m%d")
         self.query_end_at = datetime.datetime.strptime(timespan_str[9:16], "%Y%m%d")
 
-    def __repr__(self):
-        return f"GRCStatement(signed={self.signed}, title={self.title}, account_name={self.account_name}, account_id={self.account_id}, txn_len={len(self.transactions)}, apply_dt={self.apply_dt}), query_span=[{self.query_start_at} {self.query_end_at}]"
-
-class GRCTransaction(object):
+class GRCTransaction(BaseTransaction):
     HEADER = ["序号", "交易日期", "交易金额", "账户余额", "对方账号", "对方账户名", "对方开户行", "摘要", "附言"]
     @staticmethod
     def NORMALIZED_HEADER(header):
@@ -36,10 +25,11 @@ class GRCTransaction(object):
                
     def __init__(self, row):
         assert(len(row) == len(self.HEADER))
+        super().__init__()
         self.seq = int(row[0].strip())
         self.txn_dt = datetime.datetime.strptime(row[1].strip(), "%Y%m%d")
-        self.amount = locale.atof(row[2].strip())
-        self.balance = locale.atof(row[3].strip())
+        self.amount = decimal.Decimal(locale.delocalize(row[2].strip()))
+        self.balance = decimal.Decimal(locale.delocalize(row[3].strip()))
         self.other_account_id = row[4].strip()
         self.other_account_name = row[5].strip()
         self.other_bank = row[6].strip()
@@ -49,7 +39,7 @@ class GRCTransaction(object):
     def __repr__(self):
         return f"GRCTransaction(seq={self.seq}, txn_dt={self.txn_dt}, amount={self.amount}, balance={self.balance}, other_account_id={self.other_account_id}, other_account_name={self.other_account_name}, other_bank={self.other_bank}, summary={self.summary}, postscript={self.postscript})"
     
-class CNBankGRCImporter(BaseImporter):
+class ChinaBankGRCImporter(BaseImporter):
     TITLE = "广州农商银行"
     SEC_TITLE = "账户交易流水对账单"
     def __init__(self):

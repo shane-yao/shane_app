@@ -6,4 +6,3 @@ class Transaction(object):
         self.date = date
         self.description = description
         self.amount = amount
-        self.balance = balance
