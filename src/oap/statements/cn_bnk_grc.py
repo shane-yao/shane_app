@@ -2,7 +2,7 @@
 import re, datetime, locale, decimal
 import pdfplumber
 
-from .base import BaseImporter, BaseStatement, BaseTransaction
+from .base import BaseStatementProvider, BaseStatement, BaseTransaction
 
 class GRCStatement(BaseStatement):
     def __init__(self):
@@ -39,7 +39,7 @@ class GRCTransaction(BaseTransaction):
     def __repr__(self):
         return f"GRCTransaction(seq={self.seq}, txn_dt={self.txn_dt}, amount={self.amount}, balance={self.balance}, other_account_id={self.other_account_id}, other_account_name={self.other_account_name}, other_bank={self.other_bank}, summary={self.summary}, postscript={self.postscript})"
     
-class ChinaBankGRCImporter(BaseImporter):
+class ChinaBankGRCProvider(BaseStatementProvider):
     TITLE = "广州农商银行"
     SEC_TITLE = "账户交易流水对账单"
     def __init__(self):

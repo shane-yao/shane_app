@@ -15,7 +15,7 @@ class BaseStatement(object):
     def __repr__(self):
         return f"Statement(signed={self.signed}, title={self.title}, account_name={self.account_name}, account_id={self.account_id}, txn_len={len(self.transactions)}, apply_dt={self.apply_dt}), query_span=[{self.query_start_at} {self.query_end_at}]"
     
-class BaseImporter(object):
+class BaseStatementProvider(object):
     def __init__(self):
         pass
     def start(self, file):

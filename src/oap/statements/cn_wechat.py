@@ -2,7 +2,7 @@
 import re, datetime, decimal, locale
 import openpyxl
 from oap.utils import moneyfmt
-from .base import BaseImporter, BaseStatement, BaseTransaction
+from .base import BaseStatementProvider, BaseStatement, BaseTransaction
 
 class WechatStatement(BaseStatement):
     def __init__(self):
@@ -29,7 +29,7 @@ class WechatTransaction(BaseTransaction):
     def __repr__(self):
         return f"WechatTransaction(txn_dt={self.txn_dt}, amount={self.amount}, balance={self.balance}, postscript={self.postscript})"
     
-class ChinaWechatImporter(BaseImporter):
+class ChinaWechatProvider(BaseStatementProvider):
     TITLE = "微信支付账单明细"
     ACCOUNT_NAME_RE = re.compile(r"^微信昵称：\[(?P<wechat_id>.+)\]$")
     TIMESPAN_RE = re.compile(r"^起始时间：\[(?P<start_at>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\] 终止时间：\[(?P<end_at>\d{4}-\d{1,2}-\d{1,2} \d{2}:\d{2}:\d{2})\]$")
@@ -80,7 +80,6 @@ class ChinaWechatImporter(BaseImporter):
         # Locate the header row
         found_header = False
         for row, row_cells in enumerate(active_sheet.iter_rows(values_only=True), start=1):
-            print(">>>>>>>>>> ROW:", row, row_cells)
             if found_header:
                 if row_cells[0] is None or row_cells[0].strip() == "":
                     continue

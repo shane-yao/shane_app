@@ -1,11 +1,13 @@
 #-*- encoding: utf-8 -*-
 # from application import Application
-from oap.importers.cn_bnk_grc import CNBankGRCImporter
+from oap.statements.cn_bnk_grc import ChinaBankGRCProvider
+from oap.statements.cn_wechat import ChinaWechatProvider
+from oap.import_mgr import ImportManager
 
 def main():
     # app = Application()
     # app.run()
-    print(">>>>>>>>", CNBankGRCImporter().start(r"e:\download\20251104172013\20251104172013.pdf").transactions)
+
 
 
 if __name__ == "__main__":
