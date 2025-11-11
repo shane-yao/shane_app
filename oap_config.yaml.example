@@ -1,0 +1,17 @@
+importers:
+  cn_wechat:
+    cls: oap.statements.cn_wechat.ChinaWechatProvider
+    params:
+      payer_accounts:
+        招商银行信用卡(xxxx): Assets:Current:Cash:Deposit:CM
+        微信支付(sdfsdf): Assets:Current:Cash:Wechat:1111
+      payee_accounts:
+
+  cn_bnk_grc:
+    cls: oap.statements.cn_bnk_grc.ChinaBankGRCProvider
+    params:
+files:
+  - key: cn_wechat
+    file_path: e:\download\微信支付账单流水文件1xlsx
+  - key: cn_wechat
+    file_path: e:\download\微信支付账单流水文件2.xlsx

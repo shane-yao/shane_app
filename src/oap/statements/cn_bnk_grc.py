@@ -42,8 +42,9 @@ class GRCTransaction(BaseTransaction):
 class ChinaBankGRCProvider(BaseStatementProvider):
     TITLE = "广州农商银行"
     SEC_TITLE = "账户交易流水对账单"
-    def __init__(self):
-        super().__init__()
+    NAME = "ChinaBankGRCProvider"
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self._cur_statement = None
 
     def start(self, file):
@@ -51,6 +52,7 @@ class ChinaBankGRCProvider(BaseStatementProvider):
         locale.setlocale(locale.LC_ALL, "zh_CN.UTF-8")
         # TODO Check cur statement
         self._cur_statement = GRCStatement()
+        self._cur_statement.provider = self.key
         with pdfplumber.open(file) as pdf:
             self.fill_statement_base(pdf)
             self.fill_transactions(pdf)
